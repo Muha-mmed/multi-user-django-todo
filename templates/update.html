@@ -1,0 +1,21 @@
+<!-- update.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Update Todo</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form action="{{ update }}" method="post" class="bg-light p-4 rounded">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Todo Title</label>
+                        <input type="text" name="title" id="title" class="form-control" value="{{ todo.title }}" placeholder="Enter updated todo title">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

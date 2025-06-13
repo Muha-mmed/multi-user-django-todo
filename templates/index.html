@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block nav %} 
+    <nav class="navbar navbar-light justify-content-end px-4">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                {{ request.user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                <li><form action="{% url 'logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button class="dropdown-item" type="submit">Logout</button>
+</form></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form action="{% url 'delete_account' %}" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+                        {% csrf_token %}
+                        <button class="dropdown-item text-danger" type="submit">Delete Account</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav> 
+
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h2 class="text-center mb-4">📝 Todo App</h2>
+
+        <form action="{{ index }}" method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="row g-2">
+                <div class="col-12 col-md-9">
+                    <input 
+                        type="text" 
+                        name="title" 
+                        id="title" 
+                        class="form-control" 
+                        placeholder="Enter todo title" 
+                        required
+                    >
+                </div>
+                <div class="col-12 col-md-3 d-grid">
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </div>
+            </div>
+        </form>
+
+        <hr>
+
+        {% if todos %}
+            <ul class="list-group mt-4">
+                {% for todo in todos %}
+                    <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                        <span class="mb-2 mb-md-0">{{ todo.title }}</span>
+                        <div class="d-flex gap-2">
+                            <a href="update/{{ todo.id }}" class="btn btn-sm btn-outline-info">Edit</a>
+                            <a href="delete/{{ todo.id }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center mt-4 text-muted">No todos yet. Start by adding one!</p>
+        {% endif %}
+    </div>
+{% endblock %}
